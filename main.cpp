@@ -15,23 +15,39 @@ enum Movimientos
 };
 
 //Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
-int intPosicion(int numero, int pos)
+int digitoEn(int numero, int pos)
 {
     int divisor = static_cast<int>(std::pow(10, pos));
     return ( numero / divisor) % 10;
 }
 
 //Recibe un 'numero' y le asigna el valor 'nuevoVal' al digito en la posicion 'pos'
-int setPos(int numero, int pos, int nuevoVal)
+// advertencia que las posiciones en los numeros se cuentan de derecha a izquierda
+int cambiarDigito(int numero, int pos, int nuevoVal)
 {
+    //Crea un array de tamaño de nroDigitos en el numero
     std::vector<int> elementos;
-    elementos.resize(std::to_string(numero).length());
+    int nroDigitos = (int) std::to_string(numero).length();
+    elementos.resize(nroDigitos);
     
+    //Rellenar el array
     for (size_t i = 0; i < elementos.size(); i++)
     {
-        elementos[i] = intPosicion(numero, i);
+        elementos[i] = digitoEn(numero, i);
     }
-    return elementos[0];
+
+    //Cambiar el valor del digito en la pos indicada
+    //!las posiciones de los digitos de los numeros se cuentan de derecha a izquierda
+    elementos[pos] = nuevoVal;
+    
+    //Retornar los digitos concatenados en un solo numero
+    int concatenado = 0;
+    for (size_t i = 0; i < elementos.size(); i++)
+    {
+        concatenado = concatenado + elementos[i] * static_cast<int>(std::pow(10, i));
+    }
+    return concatenado;
+    
 }
 
 int opSuma(int valor, Movimientos movimiento)
@@ -39,7 +55,7 @@ int opSuma(int valor, Movimientos movimiento)
     switch (movimiento)
     {
     case Movimientos::A:
-        if ( intPosicion(valor, 4)==9 )
+        if ( digitoEn(valor, 4)==9 )
         {
 
         }
@@ -84,9 +100,10 @@ int main()
 
     }*/
     int hola = 9876;
-    std::cout<<intPosicion(hola, 0)<<std::endl;
-    std::cout<<intPosicion(hola, 1)<<std::endl;
-    std::cout<<intPosicion(hola, 2)<<std::endl;
-    std::cout<<intPosicion(hola, 3)<<std::endl;
+    //std::cout<<digitoEn(hola, 0)<<std::endl;
+    //std::cout<<digitoEn(hola, 1)<<std::endl;
+    //std::cout<<digitoEn(hola, 2)<<std::endl;
+    //std::cout<<digitoEn(hola, 3)<<std::endl;
+    std::cout<<cambiarDigito(hola,0,1)<<std::endl;
     
 }
