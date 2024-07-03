@@ -8,10 +8,10 @@
 
 enum Movimientos
 {
-    A, //Significa sumar 0011 al numero
-    B, //Significa sumar 0111 al numero
-    C, //Significa sumar 1110 al numero
-    D  //Significa sumar 1100 al numero
+    A, //Significa hacer la operacion 0011 al numero
+    B, //Significa hacer la operacion 0111 al numero
+    C, //Significa hacer la operacion 1110 al numero
+    D  //Significa hacer la operacion 1100 al numero
 };
 
 //Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
@@ -28,6 +28,14 @@ int cambiarDigito(int numero, int pos, int nuevoVal)
     //Crea un array de tamaño de nroDigitos en el numero
     std::vector<int> elementos;
     int nroDigitos = (int) std::to_string(numero).length();
+    
+    if (nroDigitos < pos)
+    {
+        //En caso la posicion que se va reasignar es mayor al nroDigitos,
+        nroDigitos = pos+1;
+        //para que el array sea del tamano adecuado
+    }
+
     elementos.resize(nroDigitos);
     
     //Rellenar el array
@@ -50,23 +58,72 @@ int cambiarDigito(int numero, int pos, int nuevoVal)
     
 }
 
-int opSuma(int valor, Movimientos movimiento)
+//Operacion que se le puede aplicar a un numero
+int operacionA(int numero)
 {
-    switch (movimiento)
+    for (int i = 0; i <= 1; i++)
     {
-    case Movimientos::A:
-        if ( digitoEn(valor, 4)==9 )
+        if ( digitoEn(numero, i)==9 )
         {
-
+            numero = cambiarDigito(numero, i, 0);
         }
-        return valor+11;
-        break;
-    
-    default:
-        return 0;
-        break;
+        else
+        {
+            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+        }
     }
+    return numero;
+}
 
+//Operacion que se le puede aplicar a un numero
+int operacionB(int numero)
+{
+    for (int i = 0; i <= 2; i++)
+    {
+        if ( digitoEn(numero, i)==9 )
+        {
+            numero = cambiarDigito(numero, i, 0);
+        }
+        else
+        {
+            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+        }
+    }
+    return numero;
+}
+
+//Operacion que se le puede aplicar a un numero
+int operacionC(int numero)
+{
+    for (int i = 1; i <= 3; i++)
+    {
+        if ( digitoEn(numero, i)==9 )
+        {
+            numero = cambiarDigito(numero, i, 0);
+        }
+        else
+        {
+            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+        }
+    }
+    return numero;
+}
+
+//Operacion que se le puede aplicar a un numero
+int operacionD(int numero)
+{
+    for (int i = 2; i <= 3; i++)
+    {
+        if ( digitoEn(numero, i)==9 )
+        {
+            numero = cambiarDigito(numero, i, 0);
+        }
+        else
+        {
+            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+        }
+    }
+    return numero;
 }
 
 int main()
@@ -100,10 +157,6 @@ int main()
 
     }*/
     int hola = 9876;
-    //std::cout<<digitoEn(hola, 0)<<std::endl;
-    //std::cout<<digitoEn(hola, 1)<<std::endl;
-    //std::cout<<digitoEn(hola, 2)<<std::endl;
-    //std::cout<<digitoEn(hola, 3)<<std::endl;
-    std::cout<<cambiarDigito(hola,0,1)<<std::endl;
+    std::cout<<operacionD(hola)<<std::endl;
     
 }
