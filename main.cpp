@@ -6,14 +6,6 @@
 #include <vector>
 #include <cmath>
 
-enum Movimientos
-{
-    A, //Significa hacer la operacion 0011 al numero
-    B, //Significa hacer la operacion 0111 al numero
-    C, //Significa hacer la operacion 1110 al numero
-    D  //Significa hacer la operacion 1100 al numero
-};
-
 //Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
 int digitoEn(int numero, int pos)
 {
@@ -29,7 +21,7 @@ int cambiarDigito(int numero, int pos, int nuevoVal)
     std::vector<int> elementos;
     int nroDigitos = (int) std::to_string(numero).length();
     
-    if (nroDigitos < pos)
+    if (nroDigitos <= pos)
     {
         //En caso la posicion que se va reasignar es mayor al nroDigitos,
         nroDigitos = pos+1;
@@ -57,6 +49,11 @@ int cambiarDigito(int numero, int pos, int nuevoVal)
     return concatenado;
     
 }
+
+//
+// Se podria simplificar estas operaciones solo con logica matematica, pero
+// en pro de la _programacion funcional_ se recurrió a trabajar con estos argumentos
+//
 
 //Operacion que se le puede aplicar a un numero
 int operacionA(int numero)
@@ -140,23 +137,56 @@ int main()
     [elementoD, peso]   -  [elementoA, peso] - ...
     */
 
+    // Array para representar los elementos ya visitados
+    bool visitados[9999] = {false};
+
+    // Pila para agregar a los nodos conforme se visitan (simula un recorrido por profundidad)
     std::stack<int> pilaElementos;
     pilaElementos.push(0);
-    /*
+    
+    
+    // Bucle para agregar los nodos
     int actual;
     while (!pilaElementos.empty())
     {
         //Obtiene el elemento encima
         actual = pilaElementos.top();
+
         pilaElementos.pop();
+        if( actual==9965 )
+        {
+            std::cout<<"Hola"<<std::endl;
+        }
 
-        //Agregar a la pila el primer valor del movimiento
+        // Agregar a la pila los valores de los movimientos posibles
+        if ( !visitados[ operacionA(actual) ] )
+        {
+            //Se agrega a la pila solo en caso no se haya visitado
+            pilaElementos.push(operacionA(actual));
+            visitados[ operacionA(actual) ] = true;
+        }
 
-        
+        if ( !visitados[ operacionB(actual) ] )
+        {
+            pilaElementos.push(operacionB(actual));
+            visitados[ operacionB(actual) ] = true;
+        }
 
+        if ( !visitados[ operacionC(actual) ] )
+        {
+            pilaElementos.push(operacionC(actual));
+            visitados[ operacionC(actual) ] = true;
+        }
 
-    }*/
-    int hola = 9876;
-    std::cout<<operacionD(hola)<<std::endl;
+        if ( !visitados[ operacionD(actual) ] )
+        {
+            pilaElementos.push(operacionD(actual));
+            visitados[ operacionD(actual) ] = true;
+        }
+
+        std::cout<<"Se reviso el numero :"<<actual<<std::endl;
+    }
+
+    std::cout<<"Termine de recorrer todos los nodos posibles"<<std::endl;
     
 }
