@@ -14,3 +14,6 @@ Con este programa de c++ se busca generar un grafo para poder verificar si todos
 #RESULTADOS
 A primera instancia, parece ser que:
 SÍ ES POSIBLE ALCANZAR TODOS LO NÚMEROS EXISTENTES
+el codigo indica que se agregaron todos los elementos al array de "visitados" y por ende, todos los valores posibles desde 0000 hasta 9999 son alcanzables.
+
+A continuación, la implementación de un algoritmo Dijkstra para encontrar movimientos para ir de un punto a otro.

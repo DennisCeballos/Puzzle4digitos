@@ -193,6 +193,23 @@ int main()
             std::cout<<"No se genero el numero: "<<i<<std::endl;
         }
     }
+
+    std::string rpta = "";
+    while ( true )
+    {
+        std::cout<<"Ingresa el numero que quieras verificar (para salir es 'N')"<<std::endl;
+        std::cin>>rpta;
+
+        if (rpta == "N")
+        {
+            break;
+        }
+        
+        if (visitados[std::stoi(rpta)])
+        {
+            std::cout<<std::endl<<"El numero si se encuentra "<<std::endl;
+        }
+    }
     
     return 0;
 }
