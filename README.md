@@ -9,3 +9,8 @@ La pregunta: **¿Es posible conseguir todos los números desde 0000 hasta 9999 c
 
 Con este programa de c++ se busca generar un grafo para poder verificar si todos los números se pueden generar con estas operaciones.
 (Podría hacerse con un simple array, pero prefiero mantener la idea de "grafo" porque la pregunta siguiente sería algo así como "cual es la ruta mínima para llegar de un número a tal otro").
+
+
+#RESULTADOS
+A primera instancia, parece ser que:
+SÍ ES POSIBLE ALCANZAR TODOS LO NÚMEROS EXISTENTES

@@ -151,12 +151,7 @@ int main()
     {
         //Obtiene el elemento encima
         actual = pilaElementos.top();
-
         pilaElementos.pop();
-        if( actual==9965 )
-        {
-            std::cout<<"Hola"<<std::endl;
-        }
 
         // Agregar a la pila los valores de los movimientos posibles
         if ( !visitados[ operacionA(actual) ] )
@@ -187,6 +182,17 @@ int main()
         std::cout<<"Se reviso el numero :"<<actual<<std::endl;
     }
 
+    std::cout<<"--------------------------------------------"<<std::endl;
     std::cout<<"Termine de recorrer todos los nodos posibles"<<std::endl;
+    std::cout<<"--------------------------------------------"<<std::endl;
+
+    for (size_t i = 0; i < 9999; i++)
+    {
+        if (visitados[i] == false)
+        {
+            std::cout<<"No se genero el numero: "<<i<<std::endl;
+        }
+    }
     
+    return 0;
 }
