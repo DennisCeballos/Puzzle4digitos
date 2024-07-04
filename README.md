@@ -1,3 +1,4 @@
+## Problema
 Supongamos que tenemos un jueguito en el que se tiene un número de cuatro dígitos (por defecto empezando en 0000), y que se puede hacer cuatro movimientos:
 * A : Aumentar en uno el valor de los primeros dos digitos,  ejem 0000 -> 0011
 * B : Aumentar en uno el valor de los primeros tres digitos, ejem 0000 -> 0111
@@ -8,10 +9,10 @@ Para mantener la temática de _juego_, podemos hacer que cada número se comport
 La pregunta: **¿Es posible conseguir todos los números desde 0000 hasta 9999 con esta operación?**
 
 Con este programa de c++ se busca generar un grafo para poder verificar si todos los números se pueden generar con estas operaciones.
-(Podría hacerse con un simple array, pero prefiero mantener la idea de "grafo" porque la pregunta siguiente sería algo así como "cual es la ruta mínima para llegar de un número a tal otro").
+>(Podría hacerse con un simple array, pero prefiero mantener la idea de "grafo" porque la pregunta siguiente sería algo así como "cual es la ruta mínima para llegar de un número a tal otro").
 
 
-#RESULTADOS
+# RESULTADOS
 A primera instancia, parece ser que:
 SÍ ES POSIBLE ALCANZAR TODOS LO NÚMEROS EXISTENTES
 el codigo indica que se agregaron todos los elementos al array de "visitados" y por ende, todos los valores posibles desde 0000 hasta 9999 son alcanzables.
