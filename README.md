@@ -4,6 +4,7 @@ Supongamos que tenemos un jueguito en el que se tiene un número de cuatro dígi
 * B : Aumentar en uno el valor de los primeros tres digitos, ejem 0000 -> 0111
 * C : Aumentar en uno el valor de los ultimos tres digitos,  ejem 0000 -> 1110
 * D : Aumentar en uno el valor de los ultimos dos digitos,   ejem 0000 -> 1100
+
 Para mantener la temática de _juego_, podemos hacer que cada número se comporte independientemente de los otro números y de forma cíclica. Es decir, se cumple que 9 + 1 = 0.
 
 La pregunta: **¿Es posible conseguir todos los números desde 0000 hasta 9999 con esta operación?**
