@@ -126,7 +126,7 @@ int operacionD(int numero)
 int main()
 {
     // Grafo para representar todos los nodos
-    std::array<std::array<std::pair<int, int>, 4>, 9999> grafo;
+    std::array<std::array<std::pair<int, int>, 4>, 10000> grafo;
     // ARRAY [ ARRAY [par int-int] ]
     // Es un array de 9999 que contiene un array de 4 que cada uno contiene un par de enteros
     /*Se ve de la siguiente forma aprox
@@ -138,7 +138,7 @@ int main()
     */
 
     // Array para representar los elementos ya visitados
-    bool visitados[9999] = {false};
+    bool visitados[10000] = {false};
 
     // Pila para agregar a los nodos conforme se visitan (simula un recorrido por profundidad)
     std::stack<int> pilaElementos;
@@ -147,39 +147,55 @@ int main()
     
     // Bucle para agregar los nodos
     int actual;
+    int siguiente; //representa el numero *siguiente* al que apunta el nodo actual (variando a lo largo del bucle)
     while (!pilaElementos.empty())
     {
         //Obtiene el elemento encima
         actual = pilaElementos.top();
         pilaElementos.pop();
 
+        std::cout<<"Se esta revisando el numero :"<<actual<<std::endl;
+
+        siguiente = operacionA(actual);
         // Agregar a la pila los valores de los movimientos posibles
-        if ( !visitados[ operacionA(actual) ] )
+        if ( !visitados[ siguiente ] )
         {
             //Se agrega a la pila solo en caso no se haya visitado
-            pilaElementos.push(operacionA(actual));
-            visitados[ operacionA(actual) ] = true;
+            pilaElementos.push( siguiente );
+            visitados[ siguiente ] = true;
         }
+        //Se agrega al array de conexiones de este mismo _nodo_
+        grafo.at(actual).at(0) = { siguiente , 1}; //Por ahora el segundo valor del par se asigna siempre a 1
 
-        if ( !visitados[ operacionB(actual) ] )
+
+        siguiente = operacionB(actual);
+        if ( !visitados[ siguiente ] )
         {
-            pilaElementos.push(operacionB(actual));
-            visitados[ operacionB(actual) ] = true;
-        }
+            pilaElementos.push( siguiente );
+            visitados[ siguiente ] = true;
 
+        }
+        grafo.at(actual).at(1) = { siguiente , 1};
+
+
+        siguiente = operacionC(actual);
         if ( !visitados[ operacionC(actual) ] )
         {
             pilaElementos.push(operacionC(actual));
             visitados[ operacionC(actual) ] = true;
-        }
 
+        }
+        grafo.at(actual).at(2) = { siguiente , 1};
+
+
+        siguiente = operacionD(actual);
         if ( !visitados[ operacionD(actual) ] )
         {
             pilaElementos.push(operacionD(actual));
             visitados[ operacionD(actual) ] = true;
-        }
 
-        std::cout<<"Se reviso el numero :"<<actual<<std::endl;
+        }
+        grafo.at(actual).at(3) = { siguiente , 1};
     }
 
     std::cout<<"--------------------------------------------"<<std::endl;
@@ -200,7 +216,7 @@ int main()
         std::cout<<"Ingresa el numero que quieras verificar (para salir es 'N')"<<std::endl;
         std::cin>>rpta;
 
-        if (rpta == "N")
+        if (rpta == "N" || rpta == "n")
         {
             break;
         }
@@ -208,6 +224,16 @@ int main()
         if (visitados[std::stoi(rpta)])
         {
             std::cout<<std::endl<<"El numero si se encuentra "<<std::endl;
+        }
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        //
+        //std::array<std::array<std::pair<int, int>, 4>, 9999> grafo;
+        for ( std::pair<int, int> par : grafo.at(i))
+        {
+            std::cout<<i<<" "<<par.first<<std::endl;
         }
     }
     
