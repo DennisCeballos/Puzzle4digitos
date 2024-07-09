@@ -20,7 +20,8 @@ void printPath(int currentVertex, std::vector<int> parents)
 {
 	// Base case : Source node has
 	// been processed
-	if (currentVertex == NO_PARENT) {
+	if (currentVertex == NO_PARENT)
+    {
 		return;
 	}
 	printPath(parents[currentVertex], parents);
@@ -50,25 +51,23 @@ void printSolution(int startVertex, std::vector<int> distances, std::vector<int>
 // Function that implements Dijkstra's
 // single source shortest path
 // algorithm for a graph
+// *en este caso ADAPTADO
 void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int startVertex)
 {
 	// shortestDistances[i] will hold the
 	// shortest distance from src to i
-	std::vector<int> shortestDistances(nVertices);
+	std::vector<int> shortestDistances;
 
 	// added[i] will true if vertex i is
 	// included / in shortest path tree
 	// or shortest distance from src to
 	// i is finalized
-	std::vector<bool> added(nVertices);
+	std::vector<bool> added;
 
 	// Initialize all distances as
 	// INFINITE and added[] as false
-	for (int vertexIndex = 0; vertexIndex < nVertices;
-		vertexIndex++) {
-		shortestDistances[vertexIndex] = INT_MAX;
-		added[vertexIndex] = false;
-	}
+    shortestDistances.resize(nVertices, INT_MAX);
+    added.resize(nVertices, false);
 
 	// Distance of source vertex from
 	// itself is always 0
@@ -86,21 +85,18 @@ void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int 
 	// vertices
 	for (int i = 1; i < nVertices; i++) {
 
-		// Pick the minimum distance vertex
+		// Pick the minimum distance vertex ()
 		// from the set of vertices not yet
 		// processed. nearestVertex is
 		// always equal to startNode in
 		// first iteration.
 		int nearestVertex = -1;
 		int shortestDistance = INT_MAX;
-		for (int vertexIndex = 0; vertexIndex < nVertices;
-			vertexIndex++) {
-			if (!added[vertexIndex]
-				&& shortestDistances[vertexIndex]
-					< shortestDistance) {
+		for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
+			if (!added[vertexIndex] && shortestDistances[vertexIndex] < shortestDistance)
+            {
 				nearestVertex = vertexIndex;
-				shortestDistance
-					= shortestDistances[vertexIndex];
+				shortestDistance = shortestDistances[vertexIndex];
 			}
 		}
 
@@ -113,9 +109,7 @@ void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int 
 		// picked vertex.
 		for (int vertexIndex = 0; vertexIndex < nVertices;
 			vertexIndex++) {
-			int edgeDistance
-				= adjacencyMatrix[nearestVertex]
-								[vertexIndex];
+			int edgeDistance = adjacencyMatrix[nearestVertex][vertexIndex];
 
 			if (edgeDistance > 0
 				&& ((shortestDistance + edgeDistance)
