@@ -154,7 +154,8 @@ int main()
         actual = pilaElementos.top();
         pilaElementos.pop();
 
-        std::cout<<"Se esta revisando el numero :"<<actual<<std::endl;
+        //Impresion de Debug
+        (actual%1000 == 0)? std::cout<<"Se esta revisando el numero :"<<actual<<std::endl : std::cout<<"";
 
         siguiente = operacionA(actual);
         // Agregar a la pila los valores de los movimientos posibles
@@ -227,6 +228,7 @@ int main()
         }
     }
 
+    //Solo para verificar si funciona la asignacion de variables al ""grafo""
     for (int i = 0; i < 10; i++)
     {
         //
