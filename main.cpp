@@ -245,16 +245,8 @@ int operacionD(int numero)
 int main()
 {
     // Grafo para representar todos los nodos
-    std::array<std::array<std::pair<int, int>, 4>, 10000> grafo;
-    // ARRAY [ ARRAY [par int-int] ]
-    // Es un array de 9999 que contiene un array de 4 que cada uno contiene un par de enteros
-    /*Se ve de la siguiente forma aprox
-    pos 0               -  pos 1             - ...
-    [elementoA, peso]   -  [elementoA, peso] - ...
-    [elementoB, peso]   -  [elementoA, peso] - ...
-    [elementoC, peso]   -  [elementoA, peso] - ...
-    [elementoD, peso]   -  [elementoA, peso] - ...
-    */
+    // se utiliza la tecnica de MATRIZ DE ADYACENCIA para la representacion
+    std::vector<std::vector<int>> grafo(10000, std::vector<int>(10000, 0));
 
     // Array para representar los elementos ya visitados
     bool visitados[10000] = {false};
@@ -263,13 +255,12 @@ int main()
     std::stack<int> pilaElementos;
     pilaElementos.push(0);
     
-    
     // Bucle para agregar los nodos
     int actual;
     int siguiente; //representa el numero *siguiente* al que apunta el nodo actual (variando a lo largo del bucle)
     while (!pilaElementos.empty())
     {
-        //Obtiene el elemento encima
+        //Obtiene el elemento de encima
         actual = pilaElementos.top();
         pilaElementos.pop();
 
@@ -284,8 +275,8 @@ int main()
             pilaElementos.push( siguiente );
             visitados[ siguiente ] = true;
         }
-        //Se agrega al array de conexiones de este mismo _nodo_
-        grafo.at(actual).at(0) = { siguiente , 1}; //Por ahora el segundo valor del par se asigna siempre a 1
+        //Se agrega a la matriz de adyacencia
+        grafo.at(actual).at(siguiente) = 1; //Por ahora el valor (peso) se asigna siempre a 1
 
 
         siguiente = operacionB(actual);
@@ -295,7 +286,7 @@ int main()
             visitados[ siguiente ] = true;
 
         }
-        grafo.at(actual).at(1) = { siguiente , 1};
+        grafo.at(actual).at(siguiente) = 1;
 
 
         siguiente = operacionC(actual);
@@ -305,7 +296,7 @@ int main()
             visitados[ operacionC(actual) ] = true;
 
         }
-        grafo.at(actual).at(2) = { siguiente , 1};
+        grafo.at(actual).at(siguiente) = 1;
 
 
         siguiente = operacionD(actual);
@@ -315,20 +306,22 @@ int main()
             visitados[ operacionD(actual) ] = true;
 
         }
-        grafo.at(actual).at(3) = { siguiente , 1};
+        grafo.at(actual).at(siguiente) = 1;
     }
 
     std::cout<<"--------------------------------------------"<<std::endl;
     std::cout<<"Termine de recorrer todos los nodos posibles"<<std::endl;
     std::cout<<"--------------------------------------------"<<std::endl;
 
-    for (size_t i = 0; i < 9999; i++)
+    for (size_t i = 0; i < 10000; i++)
     {
         if (visitados[i] == false)
         {
             std::cout<<"No se genero el numero: "<<i<<std::endl;
         }
     }
+
+    std::cout<<grafo.at(20).at(0)<<std::endl;
 
     std::string rpta = "";
     while ( true )
@@ -348,13 +341,14 @@ int main()
     }
 
     //Solo para verificar si funciona la asignacion de variables al ""grafo""
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 5; i++)
     {
-        //
-        //std::array<std::array<std::pair<int, int>, 4>, 9999> grafo;
-        for ( std::pair<int, int> par : grafo.at(i))
+        for (int j = 0; j < 10000; j++)
         {
-            std::cout<<i<<" "<<par.first<<std::endl;
+            if(grafo.at(i).at(j) == 1)
+            {
+                std::cout<<"Fila: "<<i<<" - Columna: "<<j<<std::endl;
+            }
         }
     }
     
