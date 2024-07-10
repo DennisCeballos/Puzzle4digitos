@@ -6,6 +6,125 @@
 #include <vector>
 #include <cmath>
 
+// 
+// * Algoritmo Dijkstra *
+//  Adaptado GeeksForGeeks
+//
+
+int NO_PARENT = -1;
+
+// Function to print shortest path
+// from source to currentVertex
+// using parents array
+void printPath(int currentVertex, std::vector<int> parents)
+{
+	// Base case : Source node has
+	// been processed
+	if (currentVertex == NO_PARENT)
+    {
+		return;
+	}
+	printPath(parents[currentVertex], parents);
+	std::cout << currentVertex << " ";
+}
+
+// A utility function to print
+// the constructed distances
+// array and shortest paths
+void printSolution(int startVertex, std::vector<int> distances, std::vector<int> parents)
+{
+	int nVertices = distances.size();
+	std::cout << "Vertex\t Distance\tPath";
+
+	for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++)
+    {
+		if (vertexIndex != startVertex)
+        {
+			std::cout << "\n" << startVertex << " -> ";
+			std::cout << vertexIndex << " \t\t ";
+			std::cout << distances[vertexIndex] << "\t\t";
+			printPath(vertexIndex, parents);
+		}
+	}
+}
+
+// Function that implements Dijkstra's
+// single source shortest path
+// algorithm for a graph
+// *en este caso ADAPTADO
+void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int startVertex)
+{
+	// shortestDistances[i] will hold the
+	// shortest distance from src to i
+	std::vector<int> shortestDistances;
+
+	// added[i] will true if vertex i is
+	// included / in shortest path tree
+	// or shortest distance from src to
+	// i is finalized
+	std::vector<bool> added;
+
+	// Initialize all distances as
+	// INFINITE and added[] as false
+    shortestDistances.resize(nVertices, INT_MAX);
+    added.resize(nVertices, false);
+
+	// Distance of source vertex from
+	// itself is always 0
+	shortestDistances[startVertex] = 0;
+
+	// Parent array to store shortest
+	// path tree
+	std::vector<int> parents(nVertices);
+
+	// The starting vertex does not
+	// have a parent
+	parents[startVertex] = NO_PARENT;
+
+	// Find shortest path for all
+	// vertices
+	for (int i = 1; i < nVertices; i++) {
+
+		// Pick the minimum distance vertex ()
+		// from the set of vertices not yet
+		// processed. nearestVertex is
+		// always equal to startNode in
+		// first iteration.
+		int nearestVertex = -1;
+		int shortestDistance = INT_MAX;
+		for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
+			if (!added[vertexIndex] && shortestDistances[vertexIndex] < shortestDistance)
+            {
+				nearestVertex = vertexIndex;
+				shortestDistance = shortestDistances[vertexIndex];
+			}
+		}
+
+		// Mark the picked vertex as
+		// processed
+		added[nearestVertex] = true;
+
+		// Update dist value of the
+		// adjacent vertices of the
+		// picked vertex.
+		for (int vertexIndex = 0; vertexIndex < nVertices;
+			vertexIndex++) {
+			int edgeDistance = adjacencyMatrix[nearestVertex][vertexIndex];
+
+			if (edgeDistance > 0
+				&& ((shortestDistance + edgeDistance)
+					< shortestDistances[vertexIndex])) {
+				parents[vertexIndex] = nearestVertex;
+				shortestDistances[vertexIndex]
+					= shortestDistance + edgeDistance;
+			}
+		}
+	}
+
+	printSolution(startVertex, shortestDistances, parents);
+}
+
+
 //Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
 int digitoEn(int numero, int pos)
 {
@@ -126,16 +245,8 @@ int operacionD(int numero)
 int main()
 {
     // Grafo para representar todos los nodos
-    std::array<std::array<std::pair<int, int>, 4>, 10000> grafo;
-    // ARRAY [ ARRAY [par int-int] ]
-    // Es un array de 9999 que contiene un array de 4 que cada uno contiene un par de enteros
-    /*Se ve de la siguiente forma aprox
-    pos 0               -  pos 1             - ...
-    [elementoA, peso]   -  [elementoA, peso] - ...
-    [elementoB, peso]   -  [elementoA, peso] - ...
-    [elementoC, peso]   -  [elementoA, peso] - ...
-    [elementoD, peso]   -  [elementoA, peso] - ...
-    */
+    // se utiliza la tecnica de MATRIZ DE ADYACENCIA para la representacion
+    std::vector<std::vector<int>> grafo(10000, std::vector<int>(10000, 0));
 
     // Array para representar los elementos ya visitados
     bool visitados[10000] = {false};
@@ -144,13 +255,12 @@ int main()
     std::stack<int> pilaElementos;
     pilaElementos.push(0);
     
-    
     // Bucle para agregar los nodos
     int actual;
     int siguiente; //representa el numero *siguiente* al que apunta el nodo actual (variando a lo largo del bucle)
     while (!pilaElementos.empty())
     {
-        //Obtiene el elemento encima
+        //Obtiene el elemento de encima
         actual = pilaElementos.top();
         pilaElementos.pop();
 
@@ -165,8 +275,8 @@ int main()
             pilaElementos.push( siguiente );
             visitados[ siguiente ] = true;
         }
-        //Se agrega al array de conexiones de este mismo _nodo_
-        grafo.at(actual).at(0) = { siguiente , 1}; //Por ahora el segundo valor del par se asigna siempre a 1
+        //Se agrega a la matriz de adyacencia
+        grafo.at(actual).at(siguiente) = 1; //Por ahora el valor (peso) se asigna siempre a 1
 
 
         siguiente = operacionB(actual);
@@ -176,7 +286,7 @@ int main()
             visitados[ siguiente ] = true;
 
         }
-        grafo.at(actual).at(1) = { siguiente , 1};
+        grafo.at(actual).at(siguiente) = 1;
 
 
         siguiente = operacionC(actual);
@@ -186,7 +296,7 @@ int main()
             visitados[ operacionC(actual) ] = true;
 
         }
-        grafo.at(actual).at(2) = { siguiente , 1};
+        grafo.at(actual).at(siguiente) = 1;
 
 
         siguiente = operacionD(actual);
@@ -196,20 +306,22 @@ int main()
             visitados[ operacionD(actual) ] = true;
 
         }
-        grafo.at(actual).at(3) = { siguiente , 1};
+        grafo.at(actual).at(siguiente) = 1;
     }
 
     std::cout<<"--------------------------------------------"<<std::endl;
     std::cout<<"Termine de recorrer todos los nodos posibles"<<std::endl;
     std::cout<<"--------------------------------------------"<<std::endl;
 
-    for (size_t i = 0; i < 9999; i++)
+    for (size_t i = 0; i < 10000; i++)
     {
         if (visitados[i] == false)
         {
             std::cout<<"No se genero el numero: "<<i<<std::endl;
         }
     }
+
+    std::cout<<grafo.at(20).at(0)<<std::endl;
 
     std::string rpta = "";
     while ( true )
@@ -229,13 +341,14 @@ int main()
     }
 
     //Solo para verificar si funciona la asignacion de variables al ""grafo""
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 5; i++)
     {
-        //
-        //std::array<std::array<std::pair<int, int>, 4>, 9999> grafo;
-        for ( std::pair<int, int> par : grafo.at(i))
+        for (int j = 0; j < 10000; j++)
         {
-            std::cout<<i<<" "<<par.first<<std::endl;
+            if(grafo.at(i).at(j) == 1)
+            {
+                std::cout<<"Fila: "<<i<<" - Columna: "<<j<<std::endl;
+            }
         }
     }
     
