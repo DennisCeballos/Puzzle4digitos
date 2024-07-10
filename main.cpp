@@ -107,16 +107,14 @@ void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int 
 		// Update dist value of the
 		// adjacent vertices of the
 		// picked vertex.
-		for (int vertexIndex = 0; vertexIndex < nVertices;
-			vertexIndex++) {
-			int edgeDistance = adjacencyMatrix[nearestVertex][vertexIndex];
+		for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
+			
+            int edgeDistance = adjacencyMatrix[nearestVertex][vertexIndex];
 
-			if (edgeDistance > 0
-				&& ((shortestDistance + edgeDistance)
-					< shortestDistances[vertexIndex])) {
+			if (edgeDistance > 0 && ((shortestDistance + edgeDistance) < shortestDistances[vertexIndex]))
+            {
 				parents[vertexIndex] = nearestVertex;
-				shortestDistances[vertexIndex]
-					= shortestDistance + edgeDistance;
+				shortestDistances[vertexIndex] = shortestDistance + edgeDistance;
 			}
 		}
 	}
@@ -350,7 +348,10 @@ int main()
                 std::cout<<"Fila: "<<i<<" - Columna: "<<j<<std::endl;
             }
         }
+        std::cout<<std::endl;
     }
+
+    dijkstra(10000, grafo, 1765);
     
     return 0;
 }
