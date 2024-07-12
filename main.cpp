@@ -6,7 +6,9 @@
 #include <vector>
 #include <cmath>
 
-// 
+const int NRO_NUMEROS = 10000;
+
+//
 // * Algoritmo Dijkstra *
 //  Adaptado GeeksForGeeks
 //
@@ -16,155 +18,172 @@ int NO_PARENT = -1;
 // Function to print shortest path
 // from source to currentVertex
 // using parents array
-void printPath(int currentVertex, std::vector<int> parents)
+void printPath(int currentVertex, std::vector<int> &parents)
 {
-	// Base case : Source node has
-	// been processed
-	if (currentVertex == NO_PARENT)
+    // Base case : Source node has
+    // been processed
+    if (currentVertex == NO_PARENT)
     {
-		return;
-	}
-	printPath(parents[currentVertex], parents);
-	std::cout << currentVertex << " ";
+        return;
+    }
+    printPath(parents[currentVertex], parents);
+    std::cout << currentVertex << " ";
 }
 
 // A utility function to print
 // the constructed distances
 // array and shortest paths
-void printSolution(int startVertex, std::vector<int> distances, std::vector<int> parents)
+void printHoleSolution(int startVertex, std::vector<int> &distances, std::vector<int> &parents)
 {
-	int nVertices = distances.size();
-	std::cout << "Vertex\t Distance\tPath";
+    int nVertices = distances.size();
+    std::cout << "Vertice\t\tDistancia\t\tCamino";
 
-	for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++)
+    for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++)
     {
-		if (vertexIndex != startVertex)
+        if (vertexIndex != startVertex)
         {
-			std::cout << "\n" << startVertex << " -> ";
-			std::cout << vertexIndex << " \t\t ";
-			std::cout << distances[vertexIndex] << "\t\t";
-			printPath(vertexIndex, parents);
-		}
-	}
+            std::cout << "\n"
+                      << startVertex << " -> ";
+            std::cout << vertexIndex << " \t\t ";
+            std::cout << distances[vertexIndex] << "\t\t\t";
+            printPath(vertexIndex, parents);
+        }
+    }
+}
+
+void printSolution_Especifico(int startVertex, int endVertex, std::vector<int> distances, std::vector<int> parents)
+{
+    std::cout << "Vertice \t\t Distancia \t\tCamino";
+    std::cout << "\n"
+              << startVertex << " -> ";
+    std::cout << endVertex << " \t\t ";
+    std::cout << distances[endVertex] << "\t\t\t";
+    printPath(endVertex, parents);
 }
 
 // Function that implements Dijkstra's
 // single source shortest path
 // algorithm for a graph
 // *en este caso ADAPTADO
-void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int startVertex)
+void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int startVertex, std::vector<int> &shortestDistances, std::vector<int> &parents)
 {
-	// shortestDistances[i] will hold the
-	// shortest distance from src to i
-	std::vector<int> shortestDistances;
+    // shortestDistances[i] will hold the
+    // shortest distance from src to i
+    //* en el codigo adaptado, este vector se recibe como referencia
+    shortestDistances.clear();
 
-	// added[i] will true if vertex i is
-	// included / in shortest path tree
-	// or shortest distance from src to
-	// i is finalized
-	std::vector<bool> added;
+    // added[i] will true if vertex i is
+    // included / in shortest path tree
+    // or shortest distance from src to
+    // i is finalized
+    std::vector<bool> added;
 
-	// Initialize all distances as
-	// INFINITE and added[] as false
+    // Initialize all distances as
+    // INFINITE and added[] as false
     shortestDistances.resize(nVertices, INT_MAX);
     added.resize(nVertices, false);
 
-	// Distance of source vertex from
-	// itself is always 0
-	shortestDistances[startVertex] = 0;
+    // Distance of source vertex from
+    // itself is always 0
+    shortestDistances[startVertex] = 0;
 
-	// Parent array to store shortest
-	// path tree
-	std::vector<int> parents(nVertices);
+    // Parent array to store shortest
+    // path tree
+    //* en el codigo adaptado, este vector se recibe por referencia
+    parents.clear();
+    parents.resize(nVertices);
 
-	// The starting vertex does not
-	// have a parent
-	parents[startVertex] = NO_PARENT;
+    // The starting vertex does not
+    // have a parent
+    parents[startVertex] = NO_PARENT;
 
-	// Find shortest path for all
-	// vertices
-	for (int i = 1; i < nVertices; i++) {
+    // Find shortest path for all
+    // vertices
+    for (int i = 1; i < nVertices; i++)
+    {
 
-		// Pick the minimum distance vertex ()
-		// from the set of vertices not yet
-		// processed. nearestVertex is
-		// always equal to startNode in
-		// first iteration.
-		int nearestVertex = -1;
-		int shortestDistance = INT_MAX;
-		for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
-			if (!added[vertexIndex] && shortestDistances[vertexIndex] < shortestDistance)
+        // Pick the minimum distance vertex ()
+        // from the set of vertices not yet
+        // processed. nearestVertex is
+        // always equal to startNode in
+        // first iteration.
+        int nearestVertex = -1;
+        int shortestDistance = INT_MAX;
+        for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++)
+        {
+            if (!added[vertexIndex] && shortestDistances[vertexIndex] < shortestDistance)
             {
-				nearestVertex = vertexIndex;
-				shortestDistance = shortestDistances[vertexIndex];
-			}
-		}
+                nearestVertex = vertexIndex;
+                shortestDistance = shortestDistances[vertexIndex];
+            }
+        }
 
-		// Mark the picked vertex as
-		// processed
-		added[nearestVertex] = true;
+        // Mark the picked vertex as
+        // processed
+        added[nearestVertex] = true;
 
-		// Update dist value of the
-		// adjacent vertices of the
-		// picked vertex.
-		for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
-			
+        // Update dist value of the
+        // adjacent vertices of the
+        // picked vertex.
+        for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++)
+        {
+
             int edgeDistance = adjacencyMatrix[nearestVertex][vertexIndex];
 
-			if (edgeDistance > 0 && ((shortestDistance + edgeDistance) < shortestDistances[vertexIndex]))
+            if (edgeDistance > 0 && ((shortestDistance + edgeDistance) < shortestDistances[vertexIndex]))
             {
-				parents[vertexIndex] = nearestVertex;
-				shortestDistances[vertexIndex] = shortestDistance + edgeDistance;
-			}
-		}
-	}
-
-	printSolution(startVertex, shortestDistances, parents);
+                parents[vertexIndex] = nearestVertex;
+                shortestDistances[vertexIndex] = shortestDistance + edgeDistance;
+            }
+        }
+    }
 }
 
+//
+//
+// * Algoritmo Dijkstra *
 
-//Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
+// Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
 int digitoEn(int numero, int pos)
 {
     int divisor = static_cast<int>(std::pow(10, pos));
-    return ( numero / divisor) % 10;
+    return (numero / divisor) % 10;
 }
 
-//Recibe un 'numero' y le asigna el valor 'nuevoVal' al digito en la posicion 'pos'
-// advertencia que las posiciones en los numeros se cuentan de derecha a izquierda
+// Recibe un 'numero' y le asigna el valor 'nuevoVal' al digito en la posicion 'pos'
+//  advertencia que las posiciones en los numeros se cuentan de derecha a izquierda
 int cambiarDigito(int numero, int pos, int nuevoVal)
 {
-    //Crea un array de tamaño de nroDigitos en el numero
+    // Crea un array de tamaño de nroDigitos en el numero
     std::vector<int> elementos;
-    int nroDigitos = (int) std::to_string(numero).length();
-    
+    int nroDigitos = (int)std::to_string(numero).length();
+
     if (nroDigitos <= pos)
     {
-        //En caso la posicion que se va reasignar es mayor al nroDigitos,
-        nroDigitos = pos+1;
-        //para que el array sea del tamano adecuado
+        // En caso la posicion que se va reasignar es mayor al nroDigitos,
+        nroDigitos = pos + 1;
+        // para que el array sea del tamano adecuado
     }
 
     elementos.resize(nroDigitos);
-    
-    //Rellenar el array
+
+    // Rellenar el array
     for (size_t i = 0; i < elementos.size(); i++)
     {
         elementos[i] = digitoEn(numero, i);
     }
 
-    //Cambiar el valor del digito en la pos indicada
-    //!las posiciones de los digitos de los numeros se cuentan de derecha a izquierda
+    // Cambiar el valor del digito en la pos indicada
+    //! las posiciones de los digitos de los numeros se cuentan de derecha a izquierda
     elementos[pos] = nuevoVal;
-    
-    //Retornar los digitos concatenados en un solo numero
+
+    // Retornar los digitos concatenados en un solo numero
     int concatenado = 0;
     for (size_t i = 0; i < elementos.size(); i++)
     {
         concatenado = concatenado + elementos[i] * static_cast<int>(std::pow(10, i));
     }
     return concatenado;
-    
 }
 
 //
@@ -172,69 +191,69 @@ int cambiarDigito(int numero, int pos, int nuevoVal)
 // en pro de la _programacion funcional_ se recurrió a trabajar con estos argumentos
 //
 
-//Operacion que se le puede aplicar a un numero
+// Operacion que se le puede aplicar a un numero
 int operacionA(int numero)
 {
     for (int i = 0; i <= 1; i++)
     {
-        if ( digitoEn(numero, i)==9 )
+        if (digitoEn(numero, i) == 9)
         {
             numero = cambiarDigito(numero, i, 0);
         }
         else
         {
-            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+            numero = cambiarDigito(numero, i, digitoEn(numero, i) + 1);
         }
     }
     return numero;
 }
 
-//Operacion que se le puede aplicar a un numero
+// Operacion que se le puede aplicar a un numero
 int operacionB(int numero)
 {
     for (int i = 0; i <= 2; i++)
     {
-        if ( digitoEn(numero, i)==9 )
+        if (digitoEn(numero, i) == 9)
         {
             numero = cambiarDigito(numero, i, 0);
         }
         else
         {
-            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+            numero = cambiarDigito(numero, i, digitoEn(numero, i) + 1);
         }
     }
     return numero;
 }
 
-//Operacion que se le puede aplicar a un numero
+// Operacion que se le puede aplicar a un numero
 int operacionC(int numero)
 {
     for (int i = 1; i <= 3; i++)
     {
-        if ( digitoEn(numero, i)==9 )
+        if (digitoEn(numero, i) == 9)
         {
             numero = cambiarDigito(numero, i, 0);
         }
         else
         {
-            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+            numero = cambiarDigito(numero, i, digitoEn(numero, i) + 1);
         }
     }
     return numero;
 }
 
-//Operacion que se le puede aplicar a un numero
+// Operacion que se le puede aplicar a un numero
 int operacionD(int numero)
 {
     for (int i = 2; i <= 3; i++)
     {
-        if ( digitoEn(numero, i)==9 )
+        if (digitoEn(numero, i) == 9)
         {
             numero = cambiarDigito(numero, i, 0);
         }
         else
         {
-            numero = cambiarDigito(numero, i, digitoEn(numero,i)+1);
+            numero = cambiarDigito(numero, i, digitoEn(numero, i) + 1);
         }
     }
     return numero;
@@ -244,101 +263,106 @@ int main()
 {
     // Grafo para representar todos los nodos
     // se utiliza la tecnica de MATRIZ DE ADYACENCIA para la representacion
-    std::vector<std::vector<int>> grafo(10000, std::vector<int>(10000, 0));
+    std::vector<std::vector<int>> grafo(NRO_NUMEROS, std::vector<int>(NRO_NUMEROS, 0));
 
     // Array para representar los elementos ya visitados
-    bool visitados[10000] = {false};
+    bool visitados[NRO_NUMEROS] = {false};
 
     // Pila para agregar a los nodos conforme se visitan (simula un recorrido por profundidad)
     std::stack<int> pilaElementos;
     pilaElementos.push(0);
-    
+
     // Bucle para agregar los nodos
     int actual;
-    int siguiente; //representa el numero *siguiente* al que apunta el nodo actual (variando a lo largo del bucle)
+    int siguiente; // representa el numero *siguiente* al que apunta el nodo actual (variando a lo largo del bucle)
     while (!pilaElementos.empty())
     {
-        //Obtiene el elemento de encima
+        // Obtiene el elemento de encima
         actual = pilaElementos.top();
         pilaElementos.pop();
 
-        //Impresion de Debug
-        (actual%1000 == 0)? std::cout<<"Se esta revisando el numero :"<<actual<<std::endl : std::cout<<"";
+        // Impresion de Debug
+        (actual % 1000 == 0) ? std::cout << "Se esta revisando el numero :" << actual << std::endl : std::cout << "";
 
         siguiente = operacionA(actual);
         // Agregar a la pila los valores de los movimientos posibles
-        if ( !visitados[ siguiente ] )
+        if (!visitados[siguiente])
         {
-            //Se agrega a la pila solo en caso no se haya visitado
-            pilaElementos.push( siguiente );
-            visitados[ siguiente ] = true;
+            // Se agrega a la pila solo en caso no se haya visitado
+            pilaElementos.push(siguiente);
+            visitados[siguiente] = true;
         }
-        //Se agrega a la matriz de adyacencia
-        grafo.at(actual).at(siguiente) = 1; //Por ahora el valor (peso) se asigna siempre a 1
-
+        // Se agrega a la matriz de adyacencia
+        grafo.at(actual).at(siguiente) = 1; // Por ahora el valor (peso) se asigna siempre a 1
 
         siguiente = operacionB(actual);
-        if ( !visitados[ siguiente ] )
+        if (!visitados[siguiente])
         {
-            pilaElementos.push( siguiente );
-            visitados[ siguiente ] = true;
-
+            pilaElementos.push(siguiente);
+            visitados[siguiente] = true;
         }
         grafo.at(actual).at(siguiente) = 1;
-
 
         siguiente = operacionC(actual);
-        if ( !visitados[ operacionC(actual) ] )
+        if (!visitados[operacionC(actual)])
         {
             pilaElementos.push(operacionC(actual));
-            visitados[ operacionC(actual) ] = true;
-
+            visitados[operacionC(actual)] = true;
         }
         grafo.at(actual).at(siguiente) = 1;
 
-
         siguiente = operacionD(actual);
-        if ( !visitados[ operacionD(actual) ] )
+        if (!visitados[operacionD(actual)])
         {
             pilaElementos.push(operacionD(actual));
-            visitados[ operacionD(actual) ] = true;
-
+            visitados[operacionD(actual)] = true;
         }
         grafo.at(actual).at(siguiente) = 1;
     }
 
-    std::cout<<"--------------------------------------------"<<std::endl;
-    std::cout<<"Termine de recorrer todos los nodos posibles"<<std::endl;
-    std::cout<<"--------------------------------------------"<<std::endl;
+    std::cout << "--------------------------------------------" << std::endl;
+    std::cout << "Termine de recorrer todos los nodos posibles" << std::endl;
+    std::cout << "--------------------------------------------" << std::endl;
 
-    for (size_t i = 0; i < 10000; i++)
+    for (size_t i = 0; i < NRO_NUMEROS; i++)
     {
         if (visitados[i] == false)
         {
-            std::cout<<"No se genero el numero: "<<i<<std::endl;
+            std::cout << "No se genero el numero: " << i << std::endl;
         }
     }
 
-    std::cout<<grafo.at(20).at(0)<<std::endl;
-
+    // Entrada de datos
     std::string rpta = "";
-    while ( true )
+    while (true)
     {
-        std::cout<<"Ingresa el numero que quieras verificar (para salir es 'N')"<<std::endl;
-        std::cin>>rpta;
+        std::cout << "Ingresa el numero que quieras verificar (para salir es 'N')" << std::endl;
+        std::cin >> rpta;
 
         if (rpta == "N" || rpta == "n")
         {
             break;
         }
-        
+
         if (visitados[std::stoi(rpta)])
         {
-            std::cout<<std::endl<<"El numero si se encuentra "<<std::endl;
+            std::cout << std::endl
+                      << "El numero si se encuentra" << std::endl;
         }
     }
 
-    //Solo para verificar si funciona la asignacion de variables al ""grafo""
+    // Crear los elementos necesario para la operacion de Dijsktra
+    std::vector<int> shortestDistances;
+    std::vector<int> parents;
+
+    // Ejecutar Dijkstra dado un nodo de inicio
+    dijkstra(NRO_NUMEROS, grafo, 1765, shortestDistances, parents);
+
+    // Imprimir la solucion
+    printSolution_Especifico(1765, 6540, shortestDistances, parents);
+
+    // Solo para verificar si funciona la asignacion de variables al ""grafo""
+    /*
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 10000; j++)
@@ -350,8 +374,7 @@ int main()
         }
         std::cout<<std::endl;
     }
+    */
 
-    dijkstra(10000, grafo, 1765);
-    
     return 0;
 }
