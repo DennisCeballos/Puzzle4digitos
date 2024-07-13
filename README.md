@@ -14,7 +14,7 @@ Con este programa de c++ se busca generar un grafo para poder verificar si todos
 
 
 ## RESULTADOS
-A primera instancia, parece ser que:
+Parece ser que:
 SÍ ES POSIBLE ALCANZAR TODOS LO NÚMEROS EXISTENTES
 el codigo indica que se agregaron todos los elementos al array de "visitados" y por ende, todos los valores posibles desde 0000 hasta 9999 son alcanzables.
 
@@ -26,3 +26,9 @@ Por lo cual ahora planeo que el código pueda retornar cuál es la forma más r�
 
 Desde el principio expliqué que el problema se puede representar por medio de un grafo dirigido. Donde cada nodo es un número y las aristas de salida apuntan hacia los posibles numeros a los que se puede transformar el nodo inicial. Es por ello que, ante esta situación, se puede implementar un algoritmo como Dijkstra, para identificar ""rutas mínimas"" de un nodo a otro.
 Basado en la implementación de Dijkstra de GeeksForGeeks, es necesario mantener la representación del grafo como una Matriz de adyacencia.
+
+## RESULTADOS2
+Ahora el codigo te permite ingresar dos valores numericos, uno que represente el numero de inicio y el numero de final. Y luego imprime _la ruta_ por la que debe pasar los numeros para llegar desde el punto de inicio al final.
+
+EL SIGUIENTE PASO >> Hacer que el codigo imprima la ruta mas no como numeros simples, sino como operaciones
+  > 0000 -> 2200        2       D-0011, D-0022

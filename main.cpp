@@ -1,16 +1,16 @@
 #include <iostream>
-#include <array>
-#include <utility>
 #include <stack>
 #include <string>
 #include <vector>
 #include <cmath>
+#include <iomanip>
 
 const int NRO_NUMEROS = 10000;
+void coutINT(int); //Declaracion de la funcion para que pueda ser usada desde antes
 
 //
 // * Algoritmo Dijkstra *
-//  Adaptado GeeksForGeeks
+//  Adaptado desde GeeksForGeeks
 //
 
 int NO_PARENT = -1;
@@ -27,7 +27,7 @@ void printPath(int currentVertex, std::vector<int> &parents)
         return;
     }
     printPath(parents[currentVertex], parents);
-    std::cout << currentVertex << " ";
+    coutINT( currentVertex ); std::cout << " ";
 }
 
 // A utility function to print
@@ -53,12 +53,11 @@ void printHoleSolution(int startVertex, std::vector<int> &distances, std::vector
 
 void printSolution_Especifico(int startVertex, int endVertex, std::vector<int> distances, std::vector<int> parents)
 {
-    std::cout << "Vertice \t\t Distancia \t\tCamino";
-    std::cout << "\n"
-              << startVertex << " -> ";
-    std::cout << endVertex << " \t\t ";
-    std::cout << distances[endVertex] << "\t\t\t";
+    std::cout << "Vertice \t\t Distancia \tCamino" << std::endl;
+    coutINT( startVertex ); std::cout<< " -> "; coutINT( endVertex );
+    std::cout<< " \t\t " << distances[endVertex] << "\t\t";
     printPath(endVertex, parents);
+    std::cout<<std::endl;
 }
 
 // Function that implements Dijkstra's
@@ -142,6 +141,13 @@ void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int 
 //
 //
 // * Algoritmo Dijkstra *
+
+// Imprime el numero de forma BONITA
+// un numero siempre sera de tamano 4; "230" -> "0230", "65" -> "0065", "1" -> "0001"
+void coutINT(int numero) //Reemplaza una linea de cout para imprimir un numero en formato "BONITO"
+{
+    std::cout << std::setw(4) << std::setfill('0') << numero;
+}
 
 // Recibe un 'numero' y retorna el digito que se encuentre en la posicion 'pos'
 int digitoEn(int numero, int pos)
@@ -267,6 +273,7 @@ int main()
 
     // Array para representar los elementos ya visitados
     bool visitados[NRO_NUMEROS] = {false};
+    visitados[0] = true;
 
     // Pila para agregar a los nodos conforme se visitan (simula un recorrido por profundidad)
     std::stack<int> pilaElementos;
@@ -324,6 +331,7 @@ int main()
     std::cout << "Termine de recorrer todos los nodos posibles" << std::endl;
     std::cout << "--------------------------------------------" << std::endl;
 
+    // Demostracino que TODOS los numeros (desde 0000 hasta 9999) han sido generados
     for (size_t i = 0; i < NRO_NUMEROS; i++)
     {
         if (visitados[i] == false)
@@ -332,49 +340,50 @@ int main()
         }
     }
 
-    // Entrada de datos
-    std::string rpta = "";
-    while (true)
-    {
-        std::cout << "Ingresa el numero que quieras verificar (para salir es 'N')" << std::endl;
-        std::cin >> rpta;
+    //* Calculo de rutas con Dijkstra
 
-        if (rpta == "N" || rpta == "n")
-        {
-            break;
-        }
-
-        if (visitados[std::stoi(rpta)])
-        {
-            std::cout << std::endl
-                      << "El numero si se encuentra" << std::endl;
-        }
-    }
-
-    // Crear los elementos necesario para la operacion de Dijsktra
+    // Crear las variables necesarias para la operacion de Dijsktra
     std::vector<int> shortestDistances;
     std::vector<int> parents;
 
-    // Ejecutar Dijkstra dado un nodo de inicio
-    dijkstra(NRO_NUMEROS, grafo, 1765, shortestDistances, parents);
+    // Entrada de datos para formulario
+    std::string inicio = "";
+    std::string fin = "";
+    std::string lastInicio = "pepe"; //tiene que desde el inicio ser distinto
 
-    // Imprimir la solucion
-    printSolution_Especifico(1765, 6540, shortestDistances, parents);
-
-    // Solo para verificar si funciona la asignacion de variables al ""grafo""
-    /*
-    for (int i = 0; i < 5; i++)
+    while (true)
     {
-        for (int j = 0; j < 10000; j++)
+        std::cout << "(Para salir de la ejecucion, ingresa N o n en cualquiera de las opciones)" << std::endl;
+        
+        std::cout << "Ingresa el numero de partida" << std::endl;
+        std::cin >> inicio;
+
+        std::cout << "Ingresa el numero objetivo" << std::endl;
+        std::cin >> fin;
+
+        //Las entradas de datos no tienen ningun tipo de validacion
+        //porque asumo que ningun PAYASITO va ingresar un valor no numerico para esta parte
+
+        if ( inicio == "n" || inicio == "N" || fin == "n" || fin == "N" )
         {
-            if(grafo.at(i).at(j) == 1)
-            {
-                std::cout<<"Fila: "<<i<<" - Columna: "<<j<<std::endl;
-            }
+            break;    
         }
-        std::cout<<std::endl;
+
+        std::cout << " -- RUTA SOLUCION -- " << std::endl;
+        
+        if ( inicio != lastInicio )
+        {
+            // Ejecutar Dijkstra dado un nodo de inicio
+            dijkstra(NRO_NUMEROS, grafo, std::stoi(inicio), shortestDistances, parents);
+        }
+
+        // Imprimir la solucion
+        printSolution_Especifico(std::stoi(inicio), std::stoi(fin), shortestDistances, parents);
+        std::cout << std::endl;
+
+        // Se guarda la variable para no repetir el algoritmo de Dijkstra muchas veces
+        lastInicio = inicio;
     }
-    */
 
     return 0;
 }
