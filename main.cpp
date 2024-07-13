@@ -6,7 +6,16 @@
 #include <iomanip>
 
 const int NRO_NUMEROS = 10000;
-void coutINT(int); //Declaracion de la funcion para que pueda ser usada desde antes
+
+//Declaracion de la funcion para que pueda ser usada desde antes
+std::string reconocerOperacion(int, int);
+void coutINT(int);
+int digitoEn(int, int);
+int cambiarDigito(int, int, int);
+int operacionA(int);
+int operacionB(int);
+int operacionC(int);
+int operacionD(int);
 
 //
 // * Algoritmo Dijkstra *
@@ -18,16 +27,18 @@ int NO_PARENT = -1;
 // Function to print shortest path
 // from source to currentVertex
 // using parents array
-void printPath(int currentVertex, std::vector<int> &parents)
+int printPath(int currentVertex, std::vector<int> &parents)
 {
+    int anterior;
     // Base case : Source node has
     // been processed
     if (currentVertex == NO_PARENT)
     {
-        return;
+        return -1;
     }
-    printPath(parents[currentVertex], parents);
-    coutINT( currentVertex ); std::cout << " ";
+    anterior = printPath( parents[currentVertex], parents );
+    std::cout<<reconocerOperacion(anterior, currentVertex)<<"-";coutINT( currentVertex ); std::cout << " ";
+    return currentVertex;
 }
 
 // A utility function to print
@@ -141,6 +152,30 @@ void dijkstra(int nVertices, std::vector<std::vector<int>> adjacencyMatrix, int 
 //
 //
 // * Algoritmo Dijkstra *
+
+std::string reconocerOperacion(int valorInicial, int valorLlegada)
+{
+    if (valorInicial == -1)
+    {
+        return "*";
+    }
+    if (operacionA(valorInicial) == valorLlegada)
+    {
+        return "A";
+    }
+    if (operacionB(valorInicial) == valorLlegada)
+    {
+        return "B";
+    }
+    if (operacionC(valorInicial) == valorLlegada)
+    {
+        return "C";
+    }
+    if (operacionD(valorInicial) == valorLlegada)
+    {
+        return "D";
+    }
+}
 
 // Imprime el numero de forma BONITA
 // un numero siempre sera de tamano 4; "230" -> "0230", "65" -> "0065", "1" -> "0001"
